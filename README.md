@@ -29,7 +29,7 @@ You cann test the app [clicking here.](https://6016bab54133dca4b4519c78--weather
 ## :wrench: Installation
 
 ### 1) Clone this repository
- git clone https://github.com/pablolucio97/books-collection.weather-app.git
+ git clone https://github.com/pablolucio97/weather-app.git
 
 ### 2) Run yarn install or npm install to install dependencies:
 
