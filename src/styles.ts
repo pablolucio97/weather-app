@@ -6,8 +6,18 @@ export const SearchContainer = styled.div`
     align-items: center;
     
     width: 600px;
+    min-width: 320px;
     height: 200px;
     border-radius: 3px;
+    margin: 0px auto;
+
+    @media(max-width: 720px){
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin: 50px auto;
+    }
+
     `
 
 export const SelectUf = styled.select`
@@ -70,7 +80,14 @@ export const ResultContainer = styled.div`
     width: 320px;
     height: 400px;
     border-radius: 3px;
-    margin: 0 20%;
+    margin: 0px auto;
+    background-color: #0492ff;
+
+    @media(max-width: 720px){
+        transform: scale(.8);
+        margin: 0px auto;
+    }
+
     
     
 
@@ -100,9 +117,9 @@ export const ResultContainer = styled.div`
         position: absolute;
 
         top:230px;
-        left: 110px;
+        left: 100px;
 
-        font-size: 1.2rem;
+        font-size: 1rem;
         color: #fff;
     }
 
@@ -110,13 +127,24 @@ export const ResultContainer = styled.div`
 export const Title = styled.h1`
          color: ${props => props.theme.colors.text};
         font-size: 2.4rem;
-        margin: 70px 60px 10px; 
+        margin: 50px auto 10px;
+        @media(max-width: 720px){
+            margin: 80px 50px 30px 40px;
+            text-align: center;
+        }
         
 `
 
 export const SubTitle = styled.h2`
          color: ${props => props.theme.colors.text};
         font-size: 1.8rem;
-        margin: 10px 50px 0px; 
+        margin: 0px auto;
+
+        @media(max-width: 720px){
+            margin: 10px auto;
+            text-align: center;
+            width: 300px;
+            font-size: 1.4rem;
+        }
         
 `

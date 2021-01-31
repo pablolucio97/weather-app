@@ -65,7 +65,11 @@ const App: React.FC<IResponse> = ({ sigla, nome }) => {
     (async () => {
       await axios.get<UFs[]>(`https://servicodados.ibge.gov.br/api/v1/localidades/estados`)
         .then(response => {
-          const ufList = response.data.map(item => item.sigla)
+          const ufList = response.data.sort((a,b) => {
+            if(a.sigla.toLowerCase() > b.sigla.toLowerCase()) return 1
+            if(a.sigla.toLowerCase() < b.sigla.toLowerCase()) return -1
+            return 0
+          }).map(item => item.sigla)
           setUfs(ufList)
         })
     })()
@@ -78,7 +82,7 @@ const App: React.FC<IResponse> = ({ sigla, nome }) => {
     (async () => {
       await axios.get<Cities[]>(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${selectedUf}/municipios`)
         .then(response => {
-          const citiesList = response.data.map(item => item.nome)
+          const citiesList = response.data.sort().map(item => item.nome)
           setCities(citiesList)
         })
     })()
@@ -97,7 +101,8 @@ const App: React.FC<IResponse> = ({ sigla, nome }) => {
 
 
   const getWeatherInfo = async () => {
-    await axios.get<IWeatherApi>(`https://api.openweathermap.org/data/2.5/weather?q=${selectedCity}&units=metric&APPID=${apiKey}`)
+    try{
+      await axios.get<IWeatherApi>(`https://api.openweathermap.org/data/2.5/weather?q=${selectedCity}&units=metric&APPID=${apiKey}`)
       .then(response => {
 
         const getTemp = response.data.main.temp
@@ -111,18 +116,19 @@ const App: React.FC<IResponse> = ({ sigla, nome }) => {
             setWindSpeed(Math.ceil(getWindSpeed)),
             setTemp(Math.ceil(getTemp))
           ]
-          break;
           case(404):
           return [
             setCity(''),
             setWindSpeed(0),
             setTemp(0),
-            window.alert('fsdf')
+            window.alert('City do not available.')
           ]
-          break;
           default:
         }
       })
+    }catch(error){
+      console.log(error)
+    }
   }
 
   const handleTheme = () => {
@@ -135,7 +141,7 @@ const App: React.FC<IResponse> = ({ sigla, nome }) => {
       <Switcher toggleTheme={handleTheme}/>
       <GlobalStyle />
       <Search.Title><FaCloudSun size={32}/>Weather app</Search.Title>
-      <Search.SubTitle>Find the weather info of cities across the Brazil</Search.SubTitle>
+      <Search.SubTitle>Find the weather info of cities across Brazil</Search.SubTitle>
       <Search.SearchContainer>
         <Search.SelectUf
           id="uf"
@@ -161,10 +167,10 @@ const App: React.FC<IResponse> = ({ sigla, nome }) => {
       </Search.SearchContainer>
       <Search.ResultContainer
           hidden={selectedCity === '' ? true : false}
-          style={{background: temp > 20 ? 
-            "linear-gradient(#edb483, #e8df9d)"
+          style={{background: temp > 0 ? 
+            "#0492ff"
             :
-            "linear-gradient(#e9e4c0, #ccc)"
+            "none"
           }}
 
       >
@@ -175,9 +181,9 @@ const App: React.FC<IResponse> = ({ sigla, nome }) => {
         />{city}
         </h3>
         <h1 hidden={temp < 1}>{temp}°C</h1>
-        <h4 hidden={temp < 1}><BiWind size={24}
+        <h4 hidden={temp < 1}><BiWind size={20}
           style={{marginRight: 6}}
-        /> Velocidade do vento: {windSpeed} km/h
+        /> Wind speed: {windSpeed} km/h
         </h4>
 
       </Search.ResultContainer>
